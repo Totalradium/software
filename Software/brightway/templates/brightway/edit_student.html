@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Student</title>
+    <style>
+        /* Reuse your modern styles here */
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <!-- Sidebar code as before -->
+    </div>
+    <div class="main">
+        <div class="form-card">
+            <h2>Edit Student</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn edit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

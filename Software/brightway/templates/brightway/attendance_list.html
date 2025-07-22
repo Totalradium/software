@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Attendance List</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f6f8; margin: 0; }
+        .container { max-width: 900px; margin: 40px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.07); padding: 32px; }
+        h2 { margin-top: 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 16px; }
+        th, td { padding: 10px; border-bottom: 1px solid #eee; text-align: left; }
+        th { background: #f4f6f8; }
+        .btn { background: #23272f; color: #fff; border: none; padding: 10px 24px; border-radius: 4px; cursor: pointer; font-size: 1em; transition: background 0.2s; text-decoration: none; }
+        .btn:hover { background: #3a3f51; }
+        .add-btn { margin-bottom: 16px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <!-- Sidebar code as in index.html -->
+    </div>
+    <div class="main">
+        <div class="card">
+            <h2>Attendance List</h2>
+            <a href="{% url 'add_attendance' %}" class="btn add-btn">Add New Attendance</a>
+            <table>
+                <tr>
+                    <th>Student</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+                {% for attendance in attendance_reports %}
+                <tr>
+                    <td>{{ attendance.student.first_name }} {{ attendance.student.last_name }}</td>
+                    <td>{{ attendance.date }}</td>
+                    <td>{{ attendance.status }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="3">No attendance records found.</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>

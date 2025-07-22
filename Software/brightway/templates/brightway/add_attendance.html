@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Attendance</title>
+    <style>
+        /* Use your dashboard styles here */
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <!-- Sidebar code as in index.html -->
+    </div>
+    <div class="main">
+        <div class="form-card">
+            <h2>Add Attendance</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn add">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brightway Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f4f6f8;
+        }
+        .sidebar {
+            width: 240px;
+            background: #23272f;
+            color: #fff;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+            z-index: 2;
+        }
+        .sidebar h2 {
+            margin: 0;
+            padding: 24px 0 16px 32px;
+            font-size: 1.4em;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #333;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+        }
+        .sidebar ul li a {
+            display: flex;
+            align-items: center;
+            padding: 14px 32px;
+            color: #fff;
+            text-decoration: none;
+            transition: background 0.2s;
+            border-left: 4px solid transparent;
+        }
+        .sidebar ul li a i {
+            margin-right: 8px;
+        }
+        .sidebar ul li a.active, .sidebar ul li a:hover {
+            background: #3a3f51;
+            color: #ffd700;
+            border-left: 4px solid #ffd700;
+        }
+        .main {
+            margin-left: 240px;
+            padding: 40px;
+            background: #f4f6f8;
+            min-height: 100vh;
+        }
+        .dashboard-cards {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 24px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .card.blue { background: #3a7bd5; color: #fff; }
+        .card.red { background: #f44336; color: #fff; }
+        .card.purple { background: #6a1b9a; color: #fff; }
+        .card h3 {
+            margin: 0 0 8px 0;
+            font-size: 1.2em;
+        }
+        .card .stat {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .welcome {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .stats-row {
+            display: flex;
+            gap: 32px;
+            margin-bottom: 32px;
+        }
+        .stats-row .stat-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            flex: 1;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            text-align: center;
+        }
+        .chart-container {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            margin-bottom: 32px;
+        }
+        @media (max-width: 900px) {
+            .dashboard-cards, .stats-row {
+                flex-direction: column;
+            }
+            .main {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Brightway Admin</h2>
+        <ul>
+            <li><a href="{% url 'index' %}" class="active"><i class="fa fa-tachometer-alt"></i> Admin Dashboard</a></li>
+            <li><a href="{% url 'add_student' %}"><i class="fa fa-user-plus"></i> Add Student</a></li>
+            <li><a href="{% url 'add_employee' %}"><i class="fa fa-user-tie"></i> Add Employee</a></li>
+            <li><a href="{% url 'students_list' %}"><i class="fa fa-users"></i> Student Details</a></li>
+            <li><a href="{% url 'employees_list' %}"><i class="fa fa-users-cog"></i> Employee Details</a></li>
+            <li><a href="{% url 'attendance_list' %}"><i class="fa fa-calendar-check"></i> Attendance</a></li>
+            <li><a href="{% url 'academic_calendar' %}"><i class="fa fa-calendar"></i> Academic Calendar</a></li>
+            <li><a href="{% url 'subjects_list' %}"><i class="fa fa-book"></i> Subjects</a></li>
+            <li><a href="{% url 'timetable' %}"><i class="fa fa-clock"></i> Timetable</a></li>
+            <li><a href="{% url 'settings' %}"><i class="fa fa-cogs"></i> Settings</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        <div class="dashboard-cards">
+            <div class="card blue">
+                <h3>Total Students</h3>
+                <div class="stat">{{ total_students }}</div>
+                <div>This Month: {{ students_this_month }}</div>
+            </div>
+            <div class="card purple">
+                <h3>Total Employees</h3>
+                <div class="stat">{{ total_employees }}</div>
+                <div>This Month: {{ employees_this_month }}</div>
+            </div>
+            <div class="card red">
+                <h3>Revenue</h3>
+                <div class="stat">{{ revenue }}</div>
+                <div>This Month: {{ revenue_this_month }}</div>
+            </div>
+            <div class="card blue">
+                <h3>Total Profit</h3>
+                <div class="stat">{{ profit }}</div>
+                <div>This Month: {{ profit_this_month }}</div>
+            </div>
+        </div>
+        <div class="welcome">
+            <h3>Welcome to Admin Dashboard</h3>
+            <p>Your account is verified! Enjoy your easy-to-use software.</p>
+        </div>
+        <div class="stats-row">
+            <div class="stat-box">
+                <h4>Estimated Fee This Month</h4>
+                <div style="font-size:2em; font-weight:bold;">{{ estimated_fee }}</div>
+                <div>
+                    <span style="color:#4caf50;">{{ collections }}</span> Collections &nbsp;
+                    <span style="color:#f44336;">{{ remainings }}</span> Remainings
+                </div>
+            </div>
+            <div class="stat-box">
+                <h4>Free SMS Gateway</h4>
+                <p>Send unlimited free SMS on mobile numbers.</p>
+            </div>
+        </div>
+        <div class="chart-container">
+            <h4>Statistics</h4>
+            <canvas id="statsChart" height="100"></canvas>
+        </div>
+    </div>
+    <script>
+        // Chart.js example
+        const ctx = document.getElementById('statsChart').getContext('2d');
+        const statsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ chart_labels|safe }},
+                datasets: [
+                    {
+                        label: 'Expenses',
+                        data: {{ chart_expenses|safe }},
+                        borderColor: '#f44336',
+                        backgroundColor: 'rgba(244,67,54,0.1)',
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Income',
+                        data: {{ chart_income|safe }},
+                        borderColor: '#3a7bd5',
+                        backgroundColor: 'rgba(58,123,213,0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Students List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .sidebar {
+            width: 220px;
+            background: #23272f;
+            color: #fff;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+            z-index: 2;
+        }
+        .sidebar h2 {
+            margin: 0;
+            padding: 24px 0 16px 32px;
+            font-size: 1.4em;
+            letter-spacing: 1px;
+            border-bottom: 1px solid #333;
+        }
+        .sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            flex: 1;
+        }
+        .sidebar ul li a {
+            display: block;
+            padding: 14px 32px;
+            color: #fff;
+            text-decoration: none;
+            transition: background 0.2s, color 0.2s;
+            border-left: 4px solid transparent;
+        }
+        .sidebar ul li a.active, .sidebar ul li a:hover {
+            background: #3a3f51;
+            color: #ffd700;
+            border-left: 4px solid #ffd700;
+        }
+        .main {
+            margin-left: 220px;
+            padding: 40px;
+            position: relative;
+            z-index: 1;
+        }
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            padding: 32px;
+            margin-bottom: 32px;
+            transition: box-shadow 0.2s;
+        }
+        .card h2 {
+            margin-top: 0;
+        }
+        .btn {
+            border: none;
+            padding: 8px 18px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-right: 8px;
+            transition: background 0.2s, color 0.2s;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .btn.add { background: #4caf50; color: #fff; }
+        .btn.edit { background: #2196f3; color: #fff; }
+        .btn.delete { background: #f44336; color: #fff; }
+        .btn.bulk { background: #ffd700; color: #23272f; }
+        .btn:hover { opacity: 0.85; }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+        th {
+            background: #f4f6f8;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+            }
+            .main {
+                margin-left: 0;
+                padding: 16px;
+            }
+            .card {
+                padding: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Brightway Admin</h2>
+        <ul>
+            <li><a href="{% url 'index' %}">Dashboard</a></li>
+            <li><a href="{% url 'students_list' %}" class="active">Students</a></li>
+            <li><a href="{% url 'attendance_list' %}">Attendance</a></li>
+            <li><a href="{% url 'fee_reports_list' %}">Fee Reports</a></li>
+            <li><a href="{% url 'defaulters_list' %}">Defaulters</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        <div class="card">
+            <h2>Students List</h2>
+            <a href="{% url 'add_student' %}" class="btn add">Add New Student</a>
+            <form method="post" id="bulk-action-form">
+                {% csrf_token %}
+                <table>
+                    <tr>
+                        <th><input type="checkbox" id="select-all"></th>
+                        <th>Roll No</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Section</th>
+                        <th>Date of Birth</th>
+                        <th>Actions</th>
+                    </tr>
+                    {% for student in students %}
+                    <tr>
+                        <td><input type="checkbox" name="selected_students" value="{{ student.id }}"></td>
+                        <td>{{ student.roll_no }}</td>
+                        <td>{{ student.first_name }} {{ student.last_name }}</td>
+                        <td>{{ student.student_class.name }}</td>
+                        <td>{{ student.section.name }}</td>
+                        <td>{{ student.date_of_birth }}</td>
+                        <td class="actions">
+                            <a href="{% url 'edit_student' student.id %}" class="btn edit">Edit</a>
+                            <a href="{% url 'delete_student' student.id %}" class="btn delete" onclick="return confirm('Are you sure?');">Delete</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="7">No students found.</td></tr>
+                    {% endfor %}
+                </table>
+                <button type="submit" formaction="{% url 'bulk_delete_students' %}" class="btn bulk" onclick="return confirm('Delete selected students?');">Bulk Delete</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Select all checkboxes
+        document.getElementById('select-all').addEventListener('change', function() {
+            const checkboxes = document.querySelectorAll('input[name="selected_students"]');
+            for (const cb of checkboxes) {
+                cb.checked = this.checked;
+            }
+        });
+    </script>
+</body>
+</html>

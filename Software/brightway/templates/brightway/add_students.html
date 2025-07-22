@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Student</title>
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-100 p-10">
+  <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl p-8">
+    <h2 class="text-2xl font-bold mb-6 text-center text-gray-800">🎓 Add New Student</h2>
+    <form method="post" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {% csrf_token %}
+      <!-- First Name -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">First Name</label>
+        {{ form.first_name|as_widget:class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" }}
+      </div>
+      <!-- Last Name -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Last Name</label>
+        {{ form.last_name|as_widget:class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500" }}
+      </div>
+      <!-- Father Name -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Father Name</label>
+        {{ form.father_name|as_widget:class="mt-1 w-full rounded-md border-gray-300" }}
+      </div>
+      <!-- Mother Name -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Mother Name</label>
+        {{ form.mother_name|as_widget:class="mt-1 w-full rounded-md border-gray-300" }}
+      </div>
+      <!-- Phone 1 -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Phone 1</label>
+        {{ form.phone1|as_widget:class="mt-1 w-full rounded-md border-gray-300" }}
+      </div>
+      <!-- Phone 2 -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Phone 2</label>
+        {{ form.phone2|as_widget:class="mt-1 w-full rounded-md border-gray-300" }}
+      </div>
+      <!-- Address -->
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium text-gray-700">Address</label>
+        {{ form.address|as_widget:class="mt-1 w-full rounded-md border-gray-300" rows="3" }}
+      </div>
+      <!-- Roll No -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Roll No</label>
+        {{ form.roll_no|as_widget:class="mt-1 w-full rounded-md border-gray-300" }}
+      </div>
+      <!-- Student Class -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Student Class</label>
+        {{ form.student_class|as_widget:class="mt-1 w-full rounded-md border-gray-300" }}
+      </div>
+      <!-- Section -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Section</label>
+        {{ form.section|as_widget:class="mt-1 w-full rounded-md border-gray-300" }}
+      </div>
+      <!-- Fee Amount -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Fee Amount</label>
+        {{ form.fee_amount|as_widget:class="mt-1 w-full rounded-md border-gray-300" }}
+      </div>
+      <!-- Date of Birth -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Date of Birth</label>
+        {{ form.date_of_birth|as_widget:class="mt-1 w-full rounded-md border-gray-300" id="dob" }}
+      </div>
+      <!-- Submit -->
+      <div class="md:col-span-2">
+        <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
+          Submit
+        </button>
+      </div>
+    </form>
+  </div>
+  <script>
+    flatpickr("#dob", {
+      dateFormat: "Y-m-d",
+      maxDate: "today",
+    });
+  </script>
+</body>
+</html>
