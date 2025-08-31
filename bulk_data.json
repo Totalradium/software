@@ -1,0 +1,1 @@
+{"students": [{"name": "Abdullah Rafi", "phone": "+923224995004", "class": "10th 2025", "section": "B", "status": "Present", "roll": 11}], "message": "Dear Parent,\n\nYour child {STUDENT_NAME} from 10th 2025-B was {STATUS} today (2025-08-27).\n\nThank you,\nSchool Administration"}
